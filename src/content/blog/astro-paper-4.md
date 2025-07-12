@@ -3,7 +3,7 @@ author: Sat Naing
 pubDatetime: 2025-07-12
 modDatetime: 2025-07-12
 title: AstroPaper 4.0
-ogImage: ../../assets/images/AstroPaper-v4.png
+ogImage: /AstroPaper-v4.png
 heroImage: /Emilio-Centurion.jpg
 slug: astro-paper-v4
 featured: true
@@ -12,6 +12,7 @@ tags:
   - release
 description: "AstroPaper v4: ensuring a smoother and more feature-rich blogging experience."
 ---
+
 > Editado por otro colaborador
 
 ![dibujo2](/Emilio-Centurion.jpg)
