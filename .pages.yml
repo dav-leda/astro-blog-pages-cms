@@ -13,7 +13,7 @@ content:
       - { name: pubDatetime, label: Date, type: date }
       - { name: modDatetime, label: Date, type: date }
       - { name: title, label: Title, type: string, required: true }
-      - { name: ogImage, label: OpenGraphImage, type: string }
+      - { name: ogImage, label: OpenGraphImage, type: image }
       - { name: slug, label: Slug, type: string }
       - { name: featured, label: Featured, type: boolean }
       - { name: draft, label: Draft, type: boolean }
