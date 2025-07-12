@@ -122,36 +122,67 @@ sync_git() {
     if [ $ahead -gt 0 ] && [ $behind -eq 0 ]; then
         # Only local changes - simple push
         print_status "Only local changes found. Pushing changes..."
-        git push $remote $branch
+        if [ "$FORCE" = true ]; then
+            print_warning "Force pushing changes..."
+            git push $remote $branch --force
+        else
+            git push $remote $branch
+        fi
         print_success "Successfully pushed local changes!"
         
     elif [ $ahead -eq 0 ] && [ $behind -gt 0 ]; then
         # Only remote changes - simple pull
         print_status "Only remote changes found. Pulling changes..."
-        git pull $remote $branch
+        if [ "$REBASE" = true ]; then
+            git pull $remote $branch --rebase
+        else
+            git pull $remote $branch
+        fi
         print_success "Successfully pulled remote changes!"
         
     else
-        # Both local and remote changes - merge required
-        print_status "Both local and remote changes found. Merging..."
-        
-        # Try to merge (this might open an editor for merge commit)
-        if git pull $remote $branch --no-rebase; then
-            print_success "Successfully merged remote changes!"
+        # Both local and remote changes - merge or rebase required
+        if [ "$REBASE" = true ]; then
+            print_status "Both local and remote changes found. Rebasing..."
             
-            # Check for merge conflicts
-            handle_merge_conflicts
-            
-            # Push the merge
-            print_status "Pushing merged changes..."
-            git push $remote $branch
-            print_success "Successfully pushed merged changes!"
-            
+            # Try to rebase
+            if git pull $remote $branch --rebase; then
+                print_success "Successfully rebased remote changes!"
+                
+                # Push the rebased changes
+                print_status "Pushing rebased changes..."
+                git push $remote $branch
+                print_success "Successfully pushed rebased changes!"
+                
+            else
+                print_error "Rebase failed! Please resolve conflicts manually."
+                print_status "Use 'git rebase --continue' after resolving conflicts"
+                print_status "Or use 'git rebase --abort' to cancel the rebase"
+                # Restore stashed changes even on failure
+                pop_stash $stash_status
+                exit 1
+            fi
         else
-            print_error "Merge failed! Please resolve conflicts manually."
-            # Restore stashed changes even on failure
-            pop_stash $stash_status
-            exit 1
+            print_status "Both local and remote changes found. Merging..."
+            
+            # Try to merge (this might open an editor for merge commit)
+            if git pull $remote $branch --no-rebase; then
+                print_success "Successfully merged remote changes!"
+                
+                # Check for merge conflicts
+                handle_merge_conflicts
+                
+                # Push the merge
+                print_status "Pushing merged changes..."
+                git push $remote $branch
+                print_success "Successfully pushed merged changes!"
+                
+            else
+                print_error "Merge failed! Please resolve conflicts manually."
+                # Restore stashed changes even on failure
+                pop_stash $stash_status
+                exit 1
+            fi
         fi
     fi
     
@@ -169,14 +200,28 @@ show_help() {
     echo ""
     echo "Options:"
     echo "  -h, --help     Show this help message"
-    echo "  -f, --force    Force push (use with caution)"
-    echo "  -r, --rebase   Use rebase instead of merge"
+    echo "  -f, --force    Force push (use with caution - overwrites remote)"
+    echo "  -r, --rebase   Use rebase instead of merge (creates linear history)"
     echo ""
     echo "This script will:"
     echo "  1. Fetch latest changes from remote"
     echo "  2. Stash any uncommitted changes"
     echo "  3. Synchronize local and remote branches"
     echo "  4. Restore stashed changes"
+    echo ""
+    echo "When to use --rebase:"
+    echo "  • Working on feature branches"
+    echo "  • Want clean, linear history"
+    echo "  • Personal/local branches not shared with others"
+    echo ""
+    echo "When to use merge (default):"
+    echo "  • Working on main/master branch"
+    echo "  • Collaborating with team"
+    echo "  • Want to preserve complete history"
+    echo ""
+    echo "When to use --force:"
+    echo "  • After rebasing and need to update remote"
+    echo "  • DANGER: This overwrites remote history!"
     echo ""
 }
 
