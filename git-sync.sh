@@ -106,12 +106,12 @@ sync_git() {
     fi
     
     # Check the status compared to remote
-    local ahead=$(git rev-list --count HEAD..$remote/$branch)
-    local behind=$(git rev-list --count $remote/$branch..HEAD)
+    local behind=$(git rev-list --count HEAD..$remote/$branch)
+    local ahead=$(git rev-list --count $remote/$branch..HEAD)
     
-    print_status "Local branch is $behind commits ahead and $ahead commits behind remote"
+    print_status "Local branch is $ahead commits ahead and $behind commits behind remote"
     
-    if [ $ahead -eq 0 ] && [ $behind -eq 0 ]; then
+    if [ $behind -eq 0 ] && [ $ahead -eq 0 ]; then
         print_success "Already up to date! No synchronization needed."
         return 0
     fi
@@ -119,7 +119,7 @@ sync_git() {
     # Stash uncommitted changes if any
     local stash_status=$(stash_changes)
     
-    if [ $ahead -gt 0 ] && [ $behind -eq 0 ]; then
+    if [ $behind -eq 0 ] && [ $ahead -gt 0 ]; then
         # Only local changes - simple push
         print_status "Only local changes found. Pushing changes..."
         if [ "$FORCE" = true ]; then
@@ -130,7 +130,7 @@ sync_git() {
         fi
         print_success "Successfully pushed local changes!"
         
-    elif [ $ahead -eq 0 ] && [ $behind -gt 0 ]; then
+    elif [ $behind -gt 0 ] && [ $ahead -eq 0 ]; then
         # Only remote changes - simple pull
         print_status "Only remote changes found. Pulling changes..."
         if [ "$REBASE" = true ]; then
@@ -166,7 +166,7 @@ sync_git() {
             print_status "Both local and remote changes found. Merging..."
             
             # Try to merge (this might open an editor for merge commit)
-            if git pull $remote $branch --no-rebase; then
+            if git pull $remote $branch --no-rebase --no-edit; then
                 print_success "Successfully merged remote changes!"
                 
                 # Check for merge conflicts
@@ -269,3 +269,4 @@ main() {
 
 # Run main function
 main "$@"
+# Test comment
