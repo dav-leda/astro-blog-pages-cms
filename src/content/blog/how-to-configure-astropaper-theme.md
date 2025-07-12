@@ -1,5 +1,7 @@
 ---
 author: Sat Naing
+pubDatetime: 2025-07-11
+modDatetime: 2025-07-12
 title: How to configure AstroPaper theme
 slug: how-to-configure-astropaper-theme
 featured: true
