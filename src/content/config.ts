@@ -18,6 +18,7 @@ const blog = defineCollection({
         })
         .or(z.string())
         .optional(),
+      heroImage: image().optional(),
       description: z.string(),
       canonicalURL: z.string().optional(),
     }),
