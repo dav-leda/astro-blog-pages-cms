@@ -4,6 +4,7 @@ pubDatetime: 2025-07-12
 modDatetime: 2025-07-12
 title: AstroPaper 4.0
 ogImage: ../../assets/images/AstroPaper-v4.png
+heroImage: /Emilio-Centurion.jpg
 slug: astro-paper-v4
 featured: true
 draft: false
