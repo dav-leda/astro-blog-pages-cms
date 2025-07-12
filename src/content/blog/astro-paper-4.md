@@ -12,8 +12,9 @@ tags:
   - release
 description: "AstroPaper v4: ensuring a smoother and more feature-rich blogging experience."
 ---
-
 > Editado por otro colaborador
+
+# Otra edicion
 
 ![dibujo2](/Emilio-Centurion.jpg)
 
