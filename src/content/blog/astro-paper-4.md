@@ -16,6 +16,8 @@ description: "AstroPaper v4: ensuring a smoother and more feature-rich blogging 
 
 # Otra edicion
 
+y otra
+
 ![dibujo2](/Emilio-Centurion.jpg)
 
 ![AstroPaper v4](@assets/images/AstroPaper-v4.png)
