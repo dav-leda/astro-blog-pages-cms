@@ -18,7 +18,7 @@ const blog = defineCollection({
         })
         .or(z.string())
         .optional(),
-      heroImage: image().optional(),
+      heroImage: image().or(z.string()).optional(),
       description: z.string(),
       canonicalURL: z.string().optional(),
     }),
