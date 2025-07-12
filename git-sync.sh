@@ -119,17 +119,17 @@ sync_git() {
     # Stash uncommitted changes if any
     local stash_status=$(stash_changes)
     
-    if [ $ahead -eq 0 ]; then
-        # Only remote changes - simple pull
-        print_status "Only remote changes found. Pulling changes..."
-        git pull $remote $branch
-        print_success "Successfully pulled remote changes!"
-        
-    elif [ $behind -eq 0 ]; then
+    if [ $ahead -gt 0 ] && [ $behind -eq 0 ]; then
         # Only local changes - simple push
         print_status "Only local changes found. Pushing changes..."
         git push $remote $branch
         print_success "Successfully pushed local changes!"
+        
+    elif [ $ahead -eq 0 ] && [ $behind -gt 0 ]; then
+        # Only remote changes - simple pull
+        print_status "Only remote changes found. Pulling changes..."
+        git pull $remote $branch
+        print_success "Successfully pulled remote changes!"
         
     else
         # Both local and remote changes - merge required
