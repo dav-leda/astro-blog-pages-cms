@@ -13,7 +13,7 @@ AstroPaper is a highly customizable Astro blog theme. With AstroPaper, you can c
 
 ## Table of contents
 
-![](/Emilio-Centurion.jpg)
+![dibujo](/Emilio-Centurion.jpg)
 
 ## Configuring SITE
 
